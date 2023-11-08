@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using System.Net;
 using WebApplication_mongo.data;
@@ -24,22 +25,30 @@ namespace WebApplication_mongo.Controllers
         public string Get()
         {
 
-            _context.BankInfoDrivers.AddAsync(new BankInfoDriver { BankName="", });
 
-            var address =new List<AddressInfo>();
-            address.Add(new AddressInfo { Pelak = "12", Address = "" });
-
-
-            var driver = new Driver { Name = "Hassan", FamilyName = "Olfat",AddressInfo = address
+           
+            var address = new List<AddressInfo>
+            {
+                new AddressInfo { Pelak = "12", Address = "" },
+                new AddressInfo { Pelak = "12", Address = "" }
             };
-            var a=   _context.Drivers.AddAsync(driver);
 
-            _context.BankInfoDrivers.AddAsync(new BankInfoDriver { BankName = "",DriverId= driver._id });
+
+
+            var driver = new Driver
+            {
+                Name = "Hassan",
+                FamilyName = "Olfat",
+                AddressInfo = address
+            };
+            _context.Drivers.AddAsync(driver);
+
+            _context.BankInfoDrivers.AddAsync(new BankInfoDriver { BankName = "", DriverId = driver._id });
 
             _context.SaveChanges();
 
 
-          
+
             return driver._id.ToString();
         }
     }
